@@ -13,6 +13,7 @@ namespace PlanningPoker.Data.Context
         public DbSet<Usuario> Usuarios { get; set; }
         public DbSet<Carta> Cartas { get; set; }
         public DbSet<HistoriaUsuario> HistoriaUsuarios { get; set; }
+        public DbSet<Voto> Votos { get; set; }
     }
 
 }
