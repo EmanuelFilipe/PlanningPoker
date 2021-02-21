@@ -1,11 +1,11 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using PlanningPoker.Model;
+using PlanningPoker.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace PlanningPoker.Context
+namespace PlanningPoker.Data.Context
 {
     public class ApplicationContext : DbContext
     {
@@ -15,8 +15,6 @@ namespace PlanningPoker.Context
         }
 
         public DbSet<Usuario> Usuarios { get; set; }
-                       
     }
 
-    
 }
