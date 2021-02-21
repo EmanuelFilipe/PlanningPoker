@@ -26,28 +26,24 @@ namespace PlanningPoker.Data.Repositories
         {
             var user = GetUsuarioById(usuario.Id);
 
+            if (user == null)
+                throw new ArgumentNullException("Usuario");
+
             user.Nome = usuario.Nome;
+
             _context.Usuarios.Update(user);
             _context.SaveChanges();
         }
 
         public void Excluir(Usuario usuario)
         {
-            var user = GetUsuarioById(usuario.Id);
-
             _context.Usuarios.Remove(usuario);
             _context.SaveChanges();
-
         }
 
         public Usuario GetUsuarioById(int id)
         {
-            var user = _context.Usuarios.Find(id);
-
-            if (user == null)
-                throw new ArgumentNullException("Usuario");
-            else
-                return user;
+            return _context.Usuarios.Find(id);
         }
 
         public IList<Usuario> GetAll()

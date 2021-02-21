@@ -8,8 +8,6 @@ using PlanningPoker.Models;
 
 namespace PlanningPoker.Controllers
 {
-    //[Route("api/[controller]")]
-    //[ApiController]
     public class UsuariosController : Controller
     {
         private readonly IUsuarioRepository _usuarioRepository;
@@ -41,8 +39,8 @@ namespace PlanningPoker.Controllers
             {
                 _usuarioRepository.Incluir(model);
                 var usuario = _usuarioRepository.GetAll().Last();
-                var uri = Url.Action("GetUsuario", new { id = usuario.Id });
-                return Created(uri, usuario);
+                
+                return Ok(usuario);
             }
 
             return BadRequest();
@@ -54,7 +52,7 @@ namespace PlanningPoker.Controllers
             if (ModelState.IsValid)
             {
                 _usuarioRepository.Alterar(model);
-                return Ok();
+                return Ok(_usuarioRepository.GetUsuarioById(model.Id));
             }
 
             return BadRequest();
@@ -63,8 +61,12 @@ namespace PlanningPoker.Controllers
         [HttpPost]
         public IActionResult Excluir(int id)
         {
-            var usuario = _usuarioRepository.GetUsuarioById(id);
-            _usuarioRepository.Excluir(usuario);
+            var model = _usuarioRepository.GetUsuarioById(id);
+
+            if (model == null)
+                return NotFound();
+
+            _usuarioRepository.Excluir(model);
 
             return NoContent();
         }
