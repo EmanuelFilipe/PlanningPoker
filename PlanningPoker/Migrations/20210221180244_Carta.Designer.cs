@@ -2,15 +2,17 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using PlanningPoker.Data.Context;
 
 namespace PlanningPoker.Migrations
 {
     [DbContext(typeof(ApplicationContext))]
-    partial class ApplicationContextModelSnapshot : ModelSnapshot
+    [Migration("20210221180244_Carta")]
+    partial class Carta
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -30,20 +32,6 @@ namespace PlanningPoker.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Cartas");
-                });
-
-            modelBuilder.Entity("PlanningPoker.Models.HistoriaUsuario", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<string>("Descricao")
-                        .IsRequired();
-
-                    b.HasKey("Id");
-
-                    b.ToTable("HistoriaUsuarios");
                 });
 
             modelBuilder.Entity("PlanningPoker.Models.Usuario", b =>
