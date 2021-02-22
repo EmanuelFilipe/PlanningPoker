@@ -31,6 +31,7 @@ namespace PlanningPoker
             services.AddTransient<IUsuarioRepository, UsuarioRepository>();
             services.AddTransient<ICartaRepository, CartaRepository>();
             services.AddTransient<IHistoriaUsuarioRepository, HistoriaUsuarioRepository>();
+            services.AddTransient<IVotoRepository, VotoRepository>();
 
         }
 
