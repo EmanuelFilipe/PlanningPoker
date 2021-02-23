@@ -6,7 +6,7 @@ using System.Linq;
 namespace PlanningPoker.Api
 {
     [ApiController]
-    [Route("[controller]")]
+    [Route("api/[controller]")]
     public class CartasController : ControllerBase
     {
         private readonly ICartaRepository _cartaRepository;

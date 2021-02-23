@@ -9,7 +9,7 @@ using PlanningPoker.Models;
 namespace PlanningPoker.Api
 {
     [ApiController]
-    [Route("[controller]")]
+    [Route("api/[controller]")]
     public class UsuariosController : ControllerBase
     {
         // GET api/values

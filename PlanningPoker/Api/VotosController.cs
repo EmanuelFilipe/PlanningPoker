@@ -9,7 +9,7 @@ using System.Linq;
 namespace PlanningPoker.Api
 {
     [ApiController]
-    [Route("[controller]")]
+    [Route("api/[controller]")]
     public class VotosController : ControllerBase
     {
         private readonly IVotoRepository _votoRepository;
