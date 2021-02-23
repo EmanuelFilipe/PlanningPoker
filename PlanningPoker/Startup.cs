@@ -4,9 +4,8 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using PlanningPoker.Configuration;
 using PlanningPoker.Data.Context;
-using PlanningPoker.Data.Interfaces;
-using PlanningPoker.Data.Repositories;
 using System;
 
 namespace PlanningPoker
@@ -27,14 +26,10 @@ namespace PlanningPoker
                 options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
 
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
-
-            services.AddTransient<IUsuarioRepository, UsuarioRepository>();
-            services.AddTransient<ICartaRepository, CartaRepository>();
-            services.AddTransient<IHistoriaUsuarioRepository, HistoriaUsuarioRepository>();
-            services.AddTransient<IVotoRepository, VotoRepository>();
-
+            services.ResolveVersioning();
+            services.ResolveDependencies();
         }
-
+        
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IHostingEnvironment env, IServiceProvider serviceProvider)
         {
@@ -57,7 +52,7 @@ namespace PlanningPoker
                     template: "{controller=Usuarios}/{action=Index}/{id?}");
             });
 
-            //serviceProvider.GetService<ApplicationContext>().Database.Migrate().EnsureCreated();
+            //serviceProvider.GetService<ApplicationContext>().Database.Migrate() //.EnsureCreated();
         }
     }
 }

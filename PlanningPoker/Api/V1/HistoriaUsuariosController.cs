@@ -3,10 +3,11 @@ using PlanningPoker.Data.Interfaces;
 using PlanningPoker.Models;
 using System.Linq;
 
-namespace PlanningPoker.Api
+namespace PlanningPoker.Api.V1
 {
     [ApiController]
-    [Route("api/[controller]")]
+    [ApiVersion("1.0")]
+    [Route("api/v{version:apiVersion}/[controller]")]
     public class HistoriaUsuariosController : ControllerBase
     {
         private readonly IHistoriaUsuarioRepository _historiaUsuarioRepository;

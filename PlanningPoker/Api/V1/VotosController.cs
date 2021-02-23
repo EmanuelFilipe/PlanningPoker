@@ -6,10 +6,11 @@ using PlanningPoker.Models;
 using PlanningPoker.ViewModels;
 using System.Linq;
 
-namespace PlanningPoker.Api
+namespace PlanningPoker.Api.V1
 {
     [ApiController]
-    [Route("api/[controller]")]
+    [ApiVersion("1.0")]
+    [Route("api/v{version:apiVersion}/[controller]")]
     public class VotosController : ControllerBase
     {
         private readonly IVotoRepository _votoRepository;
