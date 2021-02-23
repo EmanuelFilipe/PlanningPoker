@@ -3,9 +3,11 @@ using PlanningPoker.Data.Interfaces;
 using PlanningPoker.Models;
 using System.Linq;
 
-namespace PlanningPoker.Controllers
+namespace PlanningPoker.Api
 {
-    public class HistoriaUsuariosController : Controller
+    [ApiController]
+    [Route("[controller]")]
+    public class HistoriaUsuariosController : ControllerBase
     {
         private readonly IHistoriaUsuarioRepository _historiaUsuarioRepository;
 
@@ -14,11 +16,13 @@ namespace PlanningPoker.Controllers
             _historiaUsuarioRepository = historiaUsuarioRepository;
         }
 
+        [HttpGet]
         public IActionResult Index()
         {
-            return Json(_historiaUsuarioRepository.GetAll());
+            return Ok(_historiaUsuarioRepository.GetAll());
         }
 
+        [HttpGet("{id}")]
         public IActionResult GetHistoriaUsuario(int id)
         {
             var model = _historiaUsuarioRepository.GetHistoriaUsuarioById(id);
@@ -26,7 +30,7 @@ namespace PlanningPoker.Controllers
             if (model == null)
                 return NotFound();
 
-            return Json(model);
+            return Ok(model);
         }
 
 
@@ -44,7 +48,7 @@ namespace PlanningPoker.Controllers
             return BadRequest();
         }
 
-        [HttpPost]
+        [HttpPut]
         public IActionResult Alterar([FromBody]HistoriaUsuario model)
         {
             if (ModelState.IsValid)
@@ -56,7 +60,7 @@ namespace PlanningPoker.Controllers
             return BadRequest();
         }
 
-        [HttpPost]
+        [HttpDelete("{id}")]
         public IActionResult Excluir(int id)
         {
             var model = _historiaUsuarioRepository.GetHistoriaUsuarioById(id);

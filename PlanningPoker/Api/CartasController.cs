@@ -3,9 +3,11 @@ using PlanningPoker.Data.Interfaces;
 using PlanningPoker.Models;
 using System.Linq;
 
-namespace PlanningPoker.Controllers
+namespace PlanningPoker.Api
 {
-    public class CartasController : Controller
+    [ApiController]
+    [Route("[controller]")]
+    public class CartasController : ControllerBase
     {
         private readonly ICartaRepository _cartaRepository;
 
@@ -14,11 +16,13 @@ namespace PlanningPoker.Controllers
             _cartaRepository = cartaRepository;
         }
 
+        [HttpGet]
         public IActionResult Index()
         {
-            return Json(_cartaRepository.GetAll());
+            return Ok(_cartaRepository.GetAll());
         }
 
+        [HttpGet("{id}")]
         public IActionResult GetCarta(int id)
         {
             var model = _cartaRepository.GetCartaById(id);
@@ -26,7 +30,7 @@ namespace PlanningPoker.Controllers
             if (model == null)
                 return NotFound();
 
-            return Json(model);
+            return Ok(model);
         }
 
         [HttpPost]
@@ -43,7 +47,7 @@ namespace PlanningPoker.Controllers
             return BadRequest();
         }
 
-        [HttpPost]
+        [HttpPut]
         public IActionResult Alterar([FromBody]Carta model)
         {
             if (ModelState.IsValid)
@@ -55,7 +59,7 @@ namespace PlanningPoker.Controllers
             return BadRequest();
         }
 
-        [HttpPost]
+        [HttpDelete("{id}")]
         public IActionResult Excluir(int id)
         {
             var model = _cartaRepository.GetCartaById(id);

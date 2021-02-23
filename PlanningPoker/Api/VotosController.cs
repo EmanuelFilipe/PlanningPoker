@@ -6,9 +6,11 @@ using PlanningPoker.Models;
 using PlanningPoker.ViewModels;
 using System.Linq;
 
-namespace PlanningPoker.Controllers
+namespace PlanningPoker.Api
 {
-    public class VotosController : Controller
+    [ApiController]
+    [Route("[controller]")]
+    public class VotosController : ControllerBase
     {
         private readonly IVotoRepository _votoRepository;
         private readonly IUsuarioRepository _usuarioRepository;
@@ -27,6 +29,7 @@ namespace PlanningPoker.Controllers
             _context = context;
         }
 
+        [HttpGet]
         public IActionResult Index()
         {
             var voto = _context.Votos
@@ -38,6 +41,30 @@ namespace PlanningPoker.Controllers
                            .ToList();
 
             return Ok(voto);
+        }
+
+
+        [HttpGet("{id}")]
+        public IActionResult GetVoto(int id)
+        {
+            var voto = _context.Votos
+                           .Include(u => u.Usuario)
+                           .Include(c => c.Carta)
+                           .Include(h => h.HistoriaUsuario)
+                           .Select(v => new Voto
+                           {
+                               Id = v.Id,
+                               Usuario = v.Usuario,
+                               Carta = v.Carta,
+                               HistoriaUsuario = v.HistoriaUsuario
+                           })
+                           .Where(v => v.Id == id).SingleOrDefault();
+
+            if (voto == null)
+                return NotFound();
+
+            return Ok(voto);
+
         }
 
         [HttpPost]
@@ -54,7 +81,7 @@ namespace PlanningPoker.Controllers
             return BadRequest();
         }
 
-        [HttpPost]
+        [HttpPut]
         public IActionResult Alterar([FromBody]Voto voto)
         {
             if (ModelState.IsValid)
@@ -68,7 +95,7 @@ namespace PlanningPoker.Controllers
             return BadRequest();
         }
 
-        [HttpPost]
+        [HttpDelete("{id}")]
         public IActionResult Excluir(int id)
         {
             var voto = _context.Votos
