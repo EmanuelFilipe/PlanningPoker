@@ -6,6 +6,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using PlanningPoker.Configuration;
 using PlanningPoker.Data.Context;
+using Swashbuckle.AspNetCore.Swagger;
 using System;
 
 namespace PlanningPoker
@@ -27,6 +28,7 @@ namespace PlanningPoker
 
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
             services.ResolveVersioning();
+            services.AddSwaggerConfig();
             services.ResolveDependencies();
         }
         
@@ -49,7 +51,13 @@ namespace PlanningPoker
             {
                 routes.MapRoute(
                     name: "default",
-                    template: "{controller=Usuarios}/{action=Index}/{id?}");
+                    template: "{controller=Home}/{action=Index}/{id?}");
+            });
+
+            app.UseSwagger();
+            app.UseSwaggerUI(c =>
+            {
+                c.SwaggerEndpoint("/swagger/v1/swagger.json", "Concert WebApi");
             });
 
             //serviceProvider.GetService<ApplicationContext>().Database.Migrate() //.EnsureCreated();
