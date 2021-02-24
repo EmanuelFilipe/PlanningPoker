@@ -26,6 +26,7 @@ namespace PlanningPoker
             services.AddDbContext<ApplicationContext>(options =>
                 options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
 
+            services.AddIdentityConfiguration(Configuration);
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
             services.ResolveVersioning();
             services.AddSwaggerConfig();
@@ -45,8 +46,8 @@ namespace PlanningPoker
                 app.UseHsts();
             }
 
+            app.UseAuthentication();
             app.UseHttpsRedirection();
-            //app.UseMvc();
             app.UseMvc(routes =>
             {
                 routes.MapRoute(

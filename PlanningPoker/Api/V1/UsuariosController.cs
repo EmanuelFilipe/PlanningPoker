@@ -2,12 +2,14 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using PlanningPoker.Data.Interfaces;
 using PlanningPoker.Models;
 
 namespace PlanningPoker.Api.V1
 {
+    [Authorize]
     [ApiController]
     [ApiVersion("1.0")] //[ApiVersion("1.0", Deprecated = true)]
     [Route("api/v{version:apiVersion}/[controller]")]
@@ -21,6 +23,7 @@ namespace PlanningPoker.Api.V1
             _usuarioRepository = usuarioRepository;
         }
 
+        [AllowAnonymous]
         [HttpGet]
         public IActionResult Index()
         {
