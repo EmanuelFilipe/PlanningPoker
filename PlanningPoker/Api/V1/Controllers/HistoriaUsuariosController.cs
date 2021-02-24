@@ -1,10 +1,13 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using PlanningPoker.Data.Interfaces;
 using PlanningPoker.Models;
+using System;
 using System.Linq;
 
-namespace PlanningPoker.Api.V1
+namespace PlanningPoker.Api.V1.Controllers
 {
+    [Authorize]
     [ApiController]
     [ApiVersion("1.0")]
     [Route("api/v{version:apiVersion}/[controller]")]
@@ -17,6 +20,7 @@ namespace PlanningPoker.Api.V1
             _historiaUsuarioRepository = historiaUsuarioRepository;
         }
 
+        [AllowAnonymous]
         [HttpGet]
         public IActionResult Index()
         {
@@ -54,7 +58,15 @@ namespace PlanningPoker.Api.V1
         {
             if (ModelState.IsValid)
             {
-                _historiaUsuarioRepository.Alterar(model);
+                try
+                {
+                    _historiaUsuarioRepository.Alterar(model);
+                }
+                catch (Exception e)
+                {
+                    return NotFound(e.Message);
+                }
+                
                 return Ok(_historiaUsuarioRepository.GetHistoriaUsuarioById(model.Id));
             }
 

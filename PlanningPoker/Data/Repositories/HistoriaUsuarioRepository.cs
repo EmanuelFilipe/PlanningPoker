@@ -27,7 +27,7 @@ namespace PlanningPoker.Data.Repositories
             var model = GetHistoriaUsuarioById(historiaUsuario.Id);
 
             if (model == null)
-                throw new ArgumentNullException("HistoriaUsuario");
+                throw new ArgumentNullException();
 
             model.Descricao = historiaUsuario.Descricao;
 

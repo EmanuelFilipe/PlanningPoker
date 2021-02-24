@@ -27,7 +27,7 @@ namespace PlanningPoker.Data.Repositories
             var user = GetUsuarioById(usuario.Id);
 
             if (user == null)
-                throw new ArgumentNullException("Usuario");
+                throw new ArgumentNullException();
 
             user.Nome = usuario.Nome;
 

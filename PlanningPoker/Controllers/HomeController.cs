@@ -10,8 +10,9 @@ namespace PlanningPoker.Controllers
     {
         public IActionResult Index()
         {
-            var localHost = HttpContext.Request.Host.Value;
-            return Redirect($"https://{localHost}/swagger/index.html");
+            //var localHost = HttpContext.Request.Host.Value;
+            //return Redirect($"https://{localHost}/swagger/index.html");
+            return View();
         }
     }
 }

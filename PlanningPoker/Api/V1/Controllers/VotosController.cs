@@ -1,13 +1,16 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using PlanningPoker.Data.Context;
 using PlanningPoker.Data.Interfaces;
 using PlanningPoker.Models;
 using PlanningPoker.ViewModels;
+using System;
 using System.Linq;
 
-namespace PlanningPoker.Api.V1
+namespace PlanningPoker.Api.V1.Controllers
 {
+    [Authorize]
     [ApiController]
     [ApiVersion("1.0")]
     [Route("api/v{version:apiVersion}/[controller]")]
@@ -30,6 +33,7 @@ namespace PlanningPoker.Api.V1
             _context = context;
         }
 
+        [AllowAnonymous]
         [HttpGet]
         public IActionResult Index()
         {
@@ -88,7 +92,15 @@ namespace PlanningPoker.Api.V1
             if (ModelState.IsValid)
             {
                 AlteracaoDeDados(voto);
-                _votoRepository.Alterar(voto);
+
+                try
+                {
+                    _votoRepository.Alterar(voto);
+                }
+                catch (Exception e)
+                {
+                    return NotFound(e.Message);
+                }
 
                 return Ok(_votoRepository.GetVotoById(voto.Id));
             }

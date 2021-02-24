@@ -1,10 +1,13 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using PlanningPoker.Data.Interfaces;
 using PlanningPoker.Models;
+using System;
 using System.Linq;
 
-namespace PlanningPoker.Api.V1
+namespace PlanningPoker.Api.V1.Controllers
 {
+    [Authorize]
     [ApiController]
     [ApiVersion("1.0")]
     [Route("api/v{version:apiVersion}/[controller]")]
@@ -17,6 +20,7 @@ namespace PlanningPoker.Api.V1
             _cartaRepository = cartaRepository;
         }
 
+        [AllowAnonymous]
         [HttpGet]
         public IActionResult Index()
         {
@@ -53,7 +57,15 @@ namespace PlanningPoker.Api.V1
         {
             if (ModelState.IsValid)
             {
-                _cartaRepository.Alterar(model);
+                try
+                {
+                    _cartaRepository.Alterar(model);
+                }
+                catch (Exception e)
+                {
+                    return NotFound(e.Message);
+                }
+                
                 return Ok(_cartaRepository.GetCartaById(model.Id));
             }
 

@@ -27,7 +27,7 @@ namespace PlanningPoker.Data.Repositories
             var model = GetCartaById(carta.Id);
 
             if (model == null)
-                throw new ArgumentNullException("Carta");
+                throw new ArgumentNullException();
 
             model.ValorCarta = carta.ValorCarta;
 

@@ -28,7 +28,7 @@ namespace PlanningPoker.Data.Repositories
             var model = GetVotoById(voto.Id);
 
             if (model == null)
-                throw new ArgumentNullException("Voto");
+                throw new ArgumentNullException();
 
             _context.Votos.Update(model);
             _context.SaveChanges();

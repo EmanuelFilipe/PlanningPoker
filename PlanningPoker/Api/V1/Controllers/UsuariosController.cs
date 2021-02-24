@@ -7,7 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 using PlanningPoker.Data.Interfaces;
 using PlanningPoker.Models;
 
-namespace PlanningPoker.Api.V1
+namespace PlanningPoker.Api.V1.Controllers
 {
     [Authorize]
     [ApiController]
@@ -15,7 +15,6 @@ namespace PlanningPoker.Api.V1
     [Route("api/v{version:apiVersion}/[controller]")]
     public class UsuariosController : ControllerBase
     {
-        // GET api/values
         private readonly IUsuarioRepository _usuarioRepository;
 
         public UsuariosController(IUsuarioRepository usuarioRepository)
@@ -60,7 +59,15 @@ namespace PlanningPoker.Api.V1
         {
             if (ModelState.IsValid)
             {
-                _usuarioRepository.Alterar(model);
+                try
+                {
+                    _usuarioRepository.Alterar(model);
+                }
+                catch (Exception e)
+                {
+                    return NotFound(e.Message);
+                }
+                
                 return Ok(_usuarioRepository.GetUsuarioById(model.Id));
             }
 
