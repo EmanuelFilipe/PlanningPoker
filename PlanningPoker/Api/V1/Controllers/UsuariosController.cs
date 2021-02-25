@@ -11,7 +11,7 @@ namespace PlanningPoker.Api.V1.Controllers
 {
     [Authorize]
     [ApiController]
-    [ApiVersion("1.0")] //[ApiVersion("1.0", Deprecated = true)]
+    [ApiVersion("1.0")]
     [Route("api/v{version:apiVersion}/[controller]")]
     public class UsuariosController : ControllerBase
     {

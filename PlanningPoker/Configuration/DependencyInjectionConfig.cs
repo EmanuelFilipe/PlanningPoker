@@ -14,7 +14,6 @@ namespace PlanningPoker.Configuration
             services.AddTransient<ICartaRepository, CartaRepository>();
             services.AddTransient<IHistoriaUsuarioRepository, HistoriaUsuarioRepository>();
             services.AddTransient<IVotoRepository, VotoRepository>();
-            //services.AddTransient<IConfigureOptions<SwaggerGenOptions>, ConfigureSwaggerOptions>();
 
             return services;
         }
