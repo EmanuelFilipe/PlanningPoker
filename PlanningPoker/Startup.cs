@@ -7,7 +7,6 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using PlanningPoker.Configuration;
 using PlanningPoker.Data.Context;
-using Swashbuckle.AspNetCore.Swagger;
 using System;
 
 namespace PlanningPoker
@@ -35,7 +34,8 @@ namespace PlanningPoker
         }
         
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IHostingEnvironment env, IApiVersionDescriptionProvider provider)
+        public void Configure(IApplicationBuilder app, IHostingEnvironment env, IServiceProvider serviceProvider, 
+                              IApiVersionDescriptionProvider provider)
         {
             if (env.IsDevelopment())
             {
@@ -53,12 +53,14 @@ namespace PlanningPoker
             {
                 routes.MapRoute(
                     name: "default",
-                    template: "{controller=Home}/{action=Index}/{id?}");
+                    template: "{controller=Usuarios}/{action=Index}/{id?}");
             });
 
             app.UseSwaggerConfig(provider);
 
-            //serviceProvider.GetService<ApplicationContext>().Database.Migrate() //.EnsureCreated();
+            // Cria banco de dados através das migrations, caso não existam
+            serviceProvider.GetService<ApplicationContext>().Database.Migrate();
+            serviceProvider.GetService<ApplicationDbContext>().Database.Migrate();
         }
     }
 }

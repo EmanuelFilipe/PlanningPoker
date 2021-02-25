@@ -1,12 +1,15 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Newtonsoft.Json;
 using PlanningPoker.Data.Context;
 using PlanningPoker.Data.Interfaces;
 using PlanningPoker.Models;
 using PlanningPoker.ViewModels;
+using RabbitMQ.Client;
 using System;
 using System.Linq;
+using System.Text;
 
 namespace PlanningPoker.Api.V1.Controllers
 {
@@ -21,6 +24,11 @@ namespace PlanningPoker.Api.V1.Controllers
         private readonly ICartaRepository _cartaRepository;
         private readonly IHistoriaUsuarioRepository _historiaUsuario;
         private readonly ApplicationContext _context;
+        private readonly ConnectionFactory _connectionFactory;
+
+        private const string QUEUE_NAME = "messages";
+        private const string EXCHANGE_NAME = "AllVotes";
+        private const string MSG_SUCCESS = "Usuário criado e envio da mensagem realizado com sucesso!";
 
         public VotosController(IVotoRepository votoRepository, IUsuarioRepository usuarioRepository, 
                                ICartaRepository cartaRepository, IHistoriaUsuarioRepository historiaUsuario, 
@@ -31,6 +39,7 @@ namespace PlanningPoker.Api.V1.Controllers
             _cartaRepository = cartaRepository;
             _historiaUsuario = historiaUsuario;
             _context = context;
+            _connectionFactory = new ConnectionFactory { HostName = "localhost" };
         }
 
         [AllowAnonymous]
@@ -77,10 +86,18 @@ namespace PlanningPoker.Api.V1.Controllers
         {
             if (ModelState.IsValid)
             {
-                InclusaoDeDados(voto);
-                _votoRepository.Incluir(voto);
+                try
+                {
+                    InclusaoDeDados(voto);
+                    _votoRepository.Incluir(voto);
+                    PostMessage(voto);
 
-                return Ok(voto);
+                    return Ok(new { Mensagem = MSG_SUCCESS, data = voto });
+                }
+                catch (Exception e)
+                {
+                    return NotFound(e.Message);
+                }
             }
 
             return BadRequest();
@@ -194,7 +211,32 @@ namespace PlanningPoker.Api.V1.Controllers
 
         #endregion
 
+        private void PostMessage(Voto message)
+        {
+            using (var connection = _connectionFactory.CreateConnection())
+            {
+                using (var channel = connection.CreateModel())
+                {
+                    channel.QueueDeclare(
+                        queue: QUEUE_NAME,
+                        durable: true,
+                        exclusive: false,
+                        autoDelete: false,
+                        arguments: null
+                    );
 
+                    var strinfiedMessage = JsonConvert.SerializeObject(message);
+                    var bytesMessage = Encoding.UTF8.GetBytes(strinfiedMessage);
+
+                    channel.BasicPublish(
+                        exchange: EXCHANGE_NAME,
+                        routingKey: QUEUE_NAME,
+                        basicProperties: null,
+                        body: bytesMessage
+                    );
+                }
+            }
+        }
     }
     
 }

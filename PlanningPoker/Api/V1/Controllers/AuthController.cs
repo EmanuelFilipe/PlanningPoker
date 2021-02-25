@@ -1,15 +1,13 @@
-﻿using System;
-using System.Collections.Generic;
-using System.IdentityModel.Tokens.Jwt;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Identity;
+﻿using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 using PlanningPoker.Extensions;
 using PlanningPoker.ViewModels;
+using System;
+using System.IdentityModel.Tokens.Jwt;
+using System.Text;
+using System.Threading.Tasks;
 
 namespace PlanningPoker.Api.V1.Controllers
 {
@@ -48,7 +46,7 @@ namespace PlanningPoker.Api.V1.Controllers
                 if (result.Succeeded)
                 {
                     await _signInManager.SignInAsync(user, false);
-                    return Ok(GerarTokenJwt());
+                    return Ok();
                 }
                 else
                 {
